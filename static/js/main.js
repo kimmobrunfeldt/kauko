@@ -10,10 +10,38 @@ function debug(data) {
 }
 
 
+// Sends command to server in format: [command, [param1, ..., paramN]]
+function sendCommand(command, args, kwargs) {
+    if (typeof args === 'undefined') {
+        args = [];
+    }
+
+    if (typeof kwargs === 'undefined') {
+        kwargs = {};
+    }
+
+    $.ajax({
+        url: "/command",
+        type: "POST",
+        data: JSON.stringify([command, args, kwargs]),
+        dataType: "json",
+        async: false
+    });
+}
+
+
 $(window).load(function() {
     var canvasElementId = '#canvas',
         canvasElement = $(canvasElementId),
         canvas = canvasElement[0],
         chooseMouseButton = $('#choose-mouse'),
         chooseKeyboardButton = $('#choose-keyboard');
+
+    chooseMouseButton.bind('click', function() {
+        sendCommand('volume_up');
+    });
+
+    chooseKeyboardButton.bind('click', function() {
+        sendCommand('volume_down');
+    });
 });

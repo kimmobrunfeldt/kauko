@@ -4,11 +4,13 @@
 WSGI middleware app to serve static files and the controlling system.
 """
 
+import json
 import logging
 import mimetypes
 import os
 import urlparse
 
+import computer
 
 browserLogger = logging.getLogger('browser')
 
@@ -80,6 +82,14 @@ def main_app(env, start_response):
 
     if request_path == '/debug':
         return debug(env, start_response)
+
+    elif request_path == '/command':
+        data = json.loads(get_post_data(env))
+        command, args, kwargs = data[0], data[1], data[2]
+        computer.command(command, args, kwargs)
+
+        start_response('200 OK', [])
+        return ['']
 
     # Serve a file if it's found.
     else:

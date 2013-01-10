@@ -3,6 +3,11 @@ Classes to control OS.
 """
 
 import os
+import subprocess
+import sys
+
+
+import applescripts
 
 
 class ExampleOS(object):
@@ -33,6 +38,11 @@ class OSX(object):
     def __init__(self):
         super(OSX, self).__init__()
 
+    def _run(self, code):
+        subprocess.call(['osascript', '-e', code])
+
+    # Public commands
+
     def mouse_move(self, x, y):
         pass
 
@@ -42,4 +52,33 @@ class OSX(object):
     def send_key(self, key):
         pass
 
+    def volume_up(self):
+        self._run(applescripts.volume_up)
 
+    def volume_down(self):
+        self._run(applescripts.volume_down)
+
+
+# Mac
+if sys.platform.startswith('darwin'):
+    _computer = OSX()
+
+# Windows
+elif os.name == 'nt':
+    raise NotImplemented('Windows in not supported yet.')
+
+# *nix(Linux etc.)
+elif os.name == 'posix':
+    raise NotImplemented('Linux in not supported yet.')
+
+
+def command(command, args, kwargs):
+    """Returns success of command."""
+    print command, args, kwargs
+
+    try:
+        method = getattr(_computer, command)
+    except AttributeError:
+        return False
+
+    return method(*args, **kwargs)
