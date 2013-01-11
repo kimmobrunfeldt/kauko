@@ -11,6 +11,7 @@ function debug(data) {
 
 
 // Sends command to server in format: [command, [param1, ..., paramN]]
+// args and kwargs are optional.
 function sendCommand(command, args, kwargs) {
     if (typeof args === 'undefined') {
         args = [];
