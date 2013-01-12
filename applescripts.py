@@ -12,6 +12,13 @@ end if
 set volume output volume newVolume
 """
 
+kvolume_up = """
+tell application "System Events"
+
+    keystroke "F12" using {command down}
+end tell
+"""
+
 volume_down = """
 set currentVolume to output volume of (get volume settings)
 if currentVolume > 10 then

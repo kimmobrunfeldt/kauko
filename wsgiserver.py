@@ -15,6 +15,45 @@ import computer
 browserLogger = logging.getLogger('browser')
 
 
+def main_app(env, start_response):
+    """Provides following features:
+    - Serves static files
+    - /debug route for mobile debugging
+    - /command route for interacting with computer
+    """
+    request_path = env['PATH_INFO']
+
+    if request_path == '/debug':
+        return debug(env, start_response)
+
+    elif request_path == '/command':
+        data = json.loads(get_post_data(env))
+        command, args, kwargs = data[0], data[1], data[2]
+        computer.command(command, args, kwargs)
+
+        start_response('200 OK', [])
+        return ['']
+
+    # Serve a file if it's found.
+    else:
+        if request_path == '/':
+            request_path = '/static/index.html'
+
+        return file_response(request_path, start_response)
+
+
+def debug(env, start_response):
+    """Mobile devices can send debug information with this route"""
+    data = get_post_data(env)
+    data = urlparse.parse_qs(data)
+    browserLogger.debug(data)
+
+    start_response('200 OK', [])
+    return ['']
+
+
+# Functions for responding to file requests etc.
+
 def filepath(request_path):
     """Returns full filepath from request path.
 
@@ -61,39 +100,3 @@ def get_post_data(env):
     if length != 0:
         body = env['wsgi.input'].read(length)
     return body
-
-
-def debug(env, start_response):
-    """Mobile devices can send debug information with this route"""
-    data = get_post_data(env)
-    data = urlparse.parse_qs(data)
-    browserLogger.debug(data)
-
-    start_response('200 OK', [])
-    return ['']
-
-
-def main_app(env, start_response):
-    """Provides following features:
-    - Serves static files
-    - /debug route for mobile debugging
-    """
-    request_path = env['PATH_INFO']
-
-    if request_path == '/debug':
-        return debug(env, start_response)
-
-    elif request_path == '/command':
-        data = json.loads(get_post_data(env))
-        command, args, kwargs = data[0], data[1], data[2]
-        computer.command(command, args, kwargs)
-
-        start_response('200 OK', [])
-        return ['']
-
-    # Serve a file if it's found.
-    else:
-        if request_path == '/':
-            request_path = '/static/index.html'
-
-        return file_response(request_path, start_response)

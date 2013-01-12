@@ -35,14 +35,25 @@ $(window).load(function() {
     var canvasElementId = '#canvas',
         canvasElement = $(canvasElementId),
         canvas = canvasElement[0],
-        chooseMouseButton = $('#choose-mouse'),
-        chooseKeyboardButton = $('#choose-keyboard');
+        buttonVolumeUp = $('#button-volume-up'),
+        buttonVolumeDown = $('#button-volume-down');
+        buttonPreviousTrack = $('#button-previous-track');
+        buttonNextTrack = $('#button-next-track');
 
-    chooseMouseButton.bind('click', function() {
+    buttonVolumeUp.bind('click', function() {
         sendCommand('volume_up');
     });
 
-    chooseKeyboardButton.bind('click', function() {
+    buttonVolumeDown.bind('click', function() {
         sendCommand('volume_down');
     });
+
+    buttonPreviousTrack.bind('click', function() {
+        sendCommand('previous_track');
+    });
+
+    buttonNextTrack.bind('click', function() {
+        sendCommand('next_track');
+    });
+
 });

@@ -5,7 +5,7 @@ Classes to control OS.
 import os
 import subprocess
 import sys
-
+import Quartz
 
 import applescripts
 
@@ -15,8 +15,10 @@ class ExampleOS(object):
     def __init__(self):
         super(OSX, self).__init__()
 
-    def mouse_move(self, x, y):
-        """Moves mouse cursor to x, y in screen."""
+    def mouse_move(self, x, y, absolute=False):
+        """Moves mouse cursor to x, y in screen.
+        If absolute is False, mouse is moved relative to current position.
+        """
         pass
 
     def mouse_click(self, button=0):
@@ -32,14 +34,77 @@ class ExampleOS(object):
         """Emulates key press. Key """
         pass
 
+    def volume_up(self):
+        """Increases system volume."""
+        pass
+
+    def volume_down(self):
+        """Decreases system volume."""
+        pass
+
+    def next_track(self):
+        """Switches to next track."""
+        pass
+
+    def previous_track(self):
+        """Switches to previous track."""
+        pass
+
+    def play(self):
+        """Plays media."""
+        pass
+
+    def pause(self):
+        """Pauses media."""
+        pass
+
+    def shutdown(self):
+        """Shutdowns computer."""
+        pass
+
 
 class OSX(object):
     """OSX specific."""
+
+    # NSEvent.h
+    NSSystemDefined = 14
+
+    # hidsystem/ev_keymap.h
+    NX_KEYTYPE_SOUND_UP = 0
+    NX_KEYTYPE_SOUND_DOWN = 1
+    NX_KEYTYPE_PLAY = 16
+    NX_KEYTYPE_NEXT = 17
+    NX_KEYTYPE_PREVIOUS = 18
+    NX_KEYTYPE_FAST = 19
+    NX_KEYTYPE_REWIND = 20
+
     def __init__(self):
         super(OSX, self).__init__()
 
     def _run(self, code):
         subprocess.call(['osascript', '-e', code])
+
+    def _send_media_key(self, key):
+        """Sends key using Quartz. Valid values are self.NX_KEYTYPE_...
+        defined in this class.
+        """
+        def doKey(down):
+            ev = Quartz.NSEvent.otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2_(
+                self.NSSystemDefined,  # type
+                (0, 0),  # location
+                0xa00 if down else 0xb00,  # flags
+                0,  # timestamp
+                0,  # window
+                0,  # ctx
+                8,  # subtype
+                (key << 16) | ((0xa if down else 0xb) << 8),  # data1
+                -1  # data2
+                )
+            cev = ev.CGEvent()
+            Quartz.CGEventPost(0, cev)
+
+        doKey(True)
+        doKey(False)
 
     # Public commands
 
@@ -53,10 +118,16 @@ class OSX(object):
         pass
 
     def volume_up(self):
-        self._run(applescripts.volume_up)
+        self._send_media_key(self.NX_KEYTYPE_SOUND_UP)
 
     def volume_down(self):
-        self._run(applescripts.volume_down)
+        self._send_media_key(self.NX_KEYTYPE_SOUND_DOWN)
+
+    def previous_track(self):
+        self._send_media_key(self.NX_KEYTYPE_REWIND)
+
+    def next_track(self):
+        self._send_media_key(self.NX_KEYTYPE_FAST)
 
 
 # Mac
