@@ -35,25 +35,36 @@ $(window).load(function() {
     var canvasElementId = '#canvas',
         canvasElement = $(canvasElementId),
         canvas = canvasElement[0],
-        buttonVolumeUp = $('#button-volume-up'),
-        buttonVolumeDown = $('#button-volume-down');
-        buttonPreviousTrack = $('#button-previous-track');
-        buttonNextTrack = $('#button-next-track');
 
-    buttonVolumeUp.bind('click', function() {
+        buttonToggleSleepDisplay = $('#button-toggle-sleep-display'),
+        buttonVolumeUp = $('#button-volume-up'),
+        buttonVolumeDown = $('#button-volume-down'),
+        buttonPreviousTrack = $('#button-previous-track'),
+        buttonNextTrack = $('#button-next-track'),
+        buttonPlayPause = $('#button-play-pause');
+
+    buttonToggleSleepDisplay.bind('pointerdown', function() {
+        sendCommand('toggle_sleep_display');
+    });
+
+    buttonVolumeUp.bind('pointerdown', function() {
         sendCommand('volume_up');
     });
 
-    buttonVolumeDown.bind('click', function() {
+    buttonVolumeDown.bind('pointerdown', function() {
         sendCommand('volume_down');
     });
 
-    buttonPreviousTrack.bind('click', function() {
+    buttonPreviousTrack.bind('pointerdown', function() {
         sendCommand('previous_track');
     });
 
-    buttonNextTrack.bind('click', function() {
+    buttonNextTrack.bind('pointerdown', function() {
         sendCommand('next_track');
+    });
+
+    buttonPlayPause.bind('pointerdown', function() {
+        sendCommand('play_pause');
     });
 
 });
