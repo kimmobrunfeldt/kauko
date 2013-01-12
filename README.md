@@ -20,10 +20,10 @@ Note that the program needs super user privileges because it runs a web server o
 
 1. Install gevent.
 
-    pip install gevent
+    ```pip install gevent```
 
 2. Open terminal and run main.py
 
-    sudo ./main.py
+    ```sudo ./main.py```
 
 3. Browse to your computer's ip address with your browser. main.py prints your ip address but it might not be correct.
