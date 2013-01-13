@@ -39,6 +39,16 @@ NOTE: The program needs super user privileges because it runs a web server on po
    **main.py** prints the address you should browse to but it might not be correct.
 
 
+Installing problems
+-------------------
+
+Installing Kauko to virtualenv causes problems with Quartz if --no-site-packages flag is used:
+
+    ImportError: No module named Quartz
+
+Quartz is the library which is used to simulate keyboard and mouse events. Quartz is importable in OSX's default python located in **/usr/bin/python**.
+
+
 Supported operating systems
 ----------------------------
 
