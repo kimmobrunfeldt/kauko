@@ -1,25 +1,23 @@
 Kauko
 =====
 
-Kauko is remote control for a computer. Turn almost any device into a remote controller!
+Kauko is a remote control for computer. Turn almost any device into a remote control!
 
 ![LOGO](https://github.com/kimmobrunfeldt/kauko/raw/master/static/img/kauko.png)
 
-Client runs in your device's web browser.
-The computer you want to control runs a webserver written in Python.
-
-Requirements
+How it works
 ------------
 
-- Python ( http://www.python.org/ )
-- gevent ( http://www.gevent.org/ )
+Computer runs a web server which serves the remote control web page for devices.
+
+WARNING: Using this program might be a security risk! Anyone who can access the web page, can control your computer.
 
 Make it run
 -----------
 
-Note that the program needs super user privileges because it runs a web server on port 80.
+NOTE: The program needs super user privileges because it runs a web server on port 80 and simulates keyboard events.
 
-1. Install gevent.
+1. Install gevent( http://www.gevent.org/ ) which is a package for Python. If you have pip installed, installing is simple:
 
         pip install gevent
 
@@ -27,5 +25,11 @@ Note that the program needs super user privileges because it runs a web server o
 
         sudo ./main.py
 
-3. Browse to your computer's ip address with your browser.
-   main.py prints your ip address but it might not be correct.
+3. Browse to your computer's ip address with your device's browser.
+   **main.py** prints the address you should browse to but it might not be correct.
+
+
+Supported operating systems
+----------------------------
+
+Currently only OSX is supported, but any device that has a web browser can be used as a remote control.
