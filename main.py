@@ -7,8 +7,9 @@ Usage:
   sudo ./main.py -v -d
 
 Options:
-  -v --verbose              Prints the used commands.
-  -d --debug                Prints debug information.
+  -h --help                 Prints this help.
+  -v --verbose              Used commands are printed to console.
+  -d --debug                Debug information is printed to console.
 """
 
 # WARNING: Do NOT use this as a public web server in any way, this is not safe.
@@ -79,4 +80,7 @@ def main():
     http_server.serve_forever()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Quit.\n')
