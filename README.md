@@ -5,6 +5,11 @@ Kauko is a remote control for computer. Turn almost any device into a remote con
 
 ![LOGO](https://github.com/kimmobrunfeldt/kauko/raw/master/static/img/kauko.png)
 
+Screenshot
+
+![SCREENSHOT](https://github.com/kimmobrunfeldt/kauko/raw/master/static/img/screenshot.png)
+
+
 What are the benefits
 ---------------------
 
