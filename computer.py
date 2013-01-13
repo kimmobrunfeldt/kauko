@@ -8,9 +8,7 @@ It is chosen based on the currently running operating system.
 
 import os
 import logging
-import subprocess
 import sys
-import Quartz
 
 logger = logging.getLogger(__name__)
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -26,13 +24,15 @@ ALLOWED_METHODS = [
     'previous_track',
     'play_pause',
     'send_key',
+    'mouse_move',
+    'mouse_click'
 ]
 
 
 class ExampleOS(object):
     """Each OS class must provide the same public methods as this class."""
     def __init__(self):
-        super(OSX, self).__init__()
+        super(ExampleOS, self).__init__()
 
     def toggle_sleep_display(self):
         """Toggles display between sleep and awake."""
@@ -62,102 +62,74 @@ class ExampleOS(object):
         """Play/pause media."""
         pass
 
-
-class OSX(object):
-    """OSX specific."""
-
-    # NSEvent.h
-    NSSystemDefined = 14
-
-    # hidsystem/ev_keymap.h
-    NX_KEYTYPE_SOUND_UP = 0
-    NX_KEYTYPE_SOUND_DOWN = 1
-    NX_KEYTYPE_MUTE = 7
-    NX_KEYTYPE_PLAY = 16
-    NX_KEYTYPE_NEXT = 17
-    NX_KEYTYPE_PREVIOUS = 18
-    NX_KEYTYPE_FAST = 19
-    NX_KEYTYPE_REWIND = 20
-
-    def __init__(self):
-        super(OSX, self).__init__()
-
-    def _run(self, code):
-        logging.debug('Running "%s"' % code)
-        subprocess.call(['osascript', '-e', code])
-
-    def _send_media_key(self, key):
-        """Sends key using Quartz. Valid values are self.NX_KEYTYPE_...
-        defined in this class.
-
-        Main part taken from http://stackoverflow.com/questions/11045814/emulate-media-key-press-on-mac
-        """
-        def doKey(down):
-            ev = Quartz.NSEvent.otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2_(
-                self.NSSystemDefined,  # type
-                (0, 0),  # location
-                0xa00 if down else 0xb00,  # flags
-                0,  # timestamp
-                0,  # window
-                0,  # ctx
-                8,  # subtype
-                (key << 16) | ((0xa if down else 0xb) << 8),  # data1
-                -1  # data2
-                )
-            cev = ev.CGEvent()
-            Quartz.CGEventPost(0, cev)
-
-        doKey(True)
-        doKey(False)
-
-    # Public commands
-
-    def toggle_sleep_display(self):
-        display_is_asleep = Quartz.CGDisplayIsAsleep(0)
-
-        program_path = os.path.join(script_dir, 'vendor/SleepDisplay')
-        if not display_is_asleep:
-            subprocess.call([program_path])
-
-        else:
-            subprocess.call([program_path, '--wake'])
-
-    def volume_up(self):
-        self._send_media_key(self.NX_KEYTYPE_SOUND_UP)
-
-    def volume_down(self):
-        self._send_media_key(self.NX_KEYTYPE_SOUND_DOWN)
-
-    def toggle_mute(self):
-        self._send_media_key(self.NX_KEYTYPE_MUTE)
-
-    def previous_track(self):
-        self._send_media_key(self.NX_KEYTYPE_REWIND)
-
-    def next_track(self):
-        self._send_media_key(self.NX_KEYTYPE_FAST)
-
-    def play_pause(self):
-        self._send_media_key(self.NX_KEYTYPE_PLAY)
-
     def send_key(self, key, is_key_code=False, is_ascii=False):
-        if key == '\\':
-            key = '92'
-            is_ascii = True
+        """Simulates keypress.
+        is_key_code: Is the key AppleScript's keycode?
+        is_ascii: Is the key an ASCII character number?
+        """
+        pass
 
-        beginning = 'tell application "System Events" to'
-        if not is_key_code:
-            if not is_ascii:
-                self._run('%s keystroke "%s"' % (beginning, key))
-            else:
-                self._run('%s keystroke (ASCII character %s)' % (beginning, key))
-        else:
-            self._run('%s key code %s' % (beginning, key))
+    def mouse_move(self, x, y, relative=True):
+        """Moves mouse cursor to x, y in screen.
+        If relative, moves cursor relative to current position.
+        """
+
+    def mouse_click(self, button=1):
+        """Emulates mouse button click. Default is left click.
+
+        Kwargs:
+            button: What button of the mouse to emulate.
+                    Button is defined as 1 = left, 2 = right, 3 = middle.
+        """
+        pass
+
+
+class Mouse(object):
+    """Taken from pymouse project.
+    http://code.google.com/p/pymouse/
+    """
+
+    def press(self, x, y, button=1):
+        """Press the mouse on a givven x, y and button.
+        Button is defined as 1 = left, 2 = right, 3 = middle."""
+
+        raise NotImplementedError
+
+    def release(self, x, y, button=1):
+        """Release the mouse on a givven x, y and button.
+        Button is defined as 1 = left, 2 = right, 3 = middle."""
+
+        raise NotImplementedError
+
+    def click(self, x, y, button=1):
+        """Click the mouse on a givven x, y and button.
+        Button is defined as 1 = left, 2 = right, 3 = middle."""
+
+        self.press(x, y, button)
+        self.release(x, y, button)
+
+    def move(self, x, y):
+        """Move the mouse to a givven x and y"""
+
+        raise NotImplementedError
+
+    def position(self):
+        """Get the current mouse position in pixels.
+        Returns a tuple of 2 integers"""
+
+        raise NotImplementedError
+
+    def screen_size(self):
+        """Get the current screen size in pixels.
+        Returns a tuple of 2 integers"""
+
+        raise NotImplementedError
 
 
 # Mac
 if sys.platform.startswith('darwin'):
-    _computer = OSX()
+    import osx
+    _computer = osx.OSX()
 
 # Windows
 elif os.name == 'nt':

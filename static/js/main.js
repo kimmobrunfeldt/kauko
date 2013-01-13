@@ -69,6 +69,19 @@ $(window).load(function() {
         inputKeyboard = $('#input-keyboard'),
         buttonFocusInput = $('#button-focus-input');
 
+    callbacks = {
+        'onetap': function() {
+            sendCommand('mouse_click');
+        },
+        'twotap': function() {
+            sendCommand('mouse_click', [], {button: 2});
+        },
+        'move': function(xDiff, yDiff) {
+            sendCommand('mouse_move', [xDiff, yDiff]);
+        }
+    };
+    touchPad = new TouchPad({element: divTouchPad, callbacks: callbacks});
+
     buttonToggleSleepDisplay.bind('pointerdown', function() {
         sendCommand('toggle_sleep_display');
     });
@@ -138,4 +151,5 @@ $(window).load(function() {
             inputKeyboard.focus();
         }
     });
+
 });
