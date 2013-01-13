@@ -1,6 +1,11 @@
 Attributions
 ============
 
+Ideas
+-----
+
+Vesa Uimonen( https://github.com/vesauimonen/ ) gave ideas for this project.
+
 Icons
 -----
 Keyboard( http://thenounproject.com/noun/keyboard/#icon-No6006 ) designed by David Cadusseau( http://thenounproject.com/kaduma ) from The Noun Project
