@@ -4,5 +4,5 @@ Attributions
 Mouse( http://thenounproject.com/noun/mouse/#icon-No890 ) designed by Camila Bertoco( http://thenounproject.com/cbertoco ) from The Noun Project
 Next( http://thenounproject.com/noun/next/#icon-No8555 ) and many other icons designed by Jardson Araújo( http://thenounproject.com/jardsonaraujo ) from The Noun Project
 
-SleepDisplay.app is developed by Malcom Hall:
-http://www.malcolmhall.com/products/sleepdisplay/
+SleepDisplay is developed by Kim Hunter:
+https://github.com/bigkm/SleepDisplay
