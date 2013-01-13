@@ -21,9 +21,11 @@ ALLOWED_METHODS = [
     'toggle_sleep_display',
     'volume_up',
     'volume_down',
+    'toggle_mute',
     'next_track',
     'previous_track',
-    'play_pause'
+    'play_pause',
+    'send_key',
 ]
 
 
@@ -42,6 +44,10 @@ class ExampleOS(object):
 
     def volume_down(self):
         """Decreases system volume."""
+        pass
+
+    def toggle_mute(self):
+        """Toggle mute."""
         pass
 
     def next_track(self):
@@ -66,6 +72,7 @@ class OSX(object):
     # hidsystem/ev_keymap.h
     NX_KEYTYPE_SOUND_UP = 0
     NX_KEYTYPE_SOUND_DOWN = 1
+    NX_KEYTYPE_MUTE = 7
     NX_KEYTYPE_PLAY = 16
     NX_KEYTYPE_NEXT = 17
     NX_KEYTYPE_PREVIOUS = 18
@@ -74,6 +81,10 @@ class OSX(object):
 
     def __init__(self):
         super(OSX, self).__init__()
+
+    def _run(self, code):
+        logging.debug('Running "%s"' % code)
+        subprocess.call(['osascript', '-e', code])
 
     def _send_media_key(self, key):
         """Sends key using Quartz. Valid values are self.NX_KEYTYPE_...
@@ -117,6 +128,9 @@ class OSX(object):
     def volume_down(self):
         self._send_media_key(self.NX_KEYTYPE_SOUND_DOWN)
 
+    def toggle_mute(self):
+        self._send_media_key(self.NX_KEYTYPE_MUTE)
+
     def previous_track(self):
         self._send_media_key(self.NX_KEYTYPE_REWIND)
 
@@ -125,6 +139,20 @@ class OSX(object):
 
     def play_pause(self):
         self._send_media_key(self.NX_KEYTYPE_PLAY)
+
+    def send_key(self, key, is_key_code=False, is_ascii=False):
+        if key == '\\':
+            key = '92'
+            is_ascii = True
+
+        beginning = 'tell application "System Events" to'
+        if not is_key_code:
+            if not is_ascii:
+                self._run('%s keystroke "%s"' % (beginning, key))
+            else:
+                self._run('%s keystroke (ASCII character %s)' % (beginning, key))
+        else:
+            self._run('%s key code %s' % (beginning, key))
 
 
 # Mac
@@ -145,6 +173,8 @@ def command(command, args, kwargs):
     logger.info('%s %s %s' % (command, args, kwargs))
 
     if command not in ALLOWED_METHODS:
+        logger.warning('Unallowed method %s was called with %s %s' %
+                       (command, args, kwargs))
         return False
 
     try:
