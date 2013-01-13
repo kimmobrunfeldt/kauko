@@ -7,11 +7,12 @@ It is chosen based on the currently running operating system.
 """
 
 import os
+import logging
 import subprocess
 import sys
 import Quartz
 
-
+logger = logging.getLogger(__name__)
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -141,7 +142,7 @@ elif os.name == 'posix':
 
 def command(command, args, kwargs):
     """Returns success of command."""
-    print command, args, kwargs
+    logger.info('%s %s %s' % (command, args, kwargs))
 
     if command not in ALLOWED_METHODS:
         return False

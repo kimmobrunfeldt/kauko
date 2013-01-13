@@ -66,17 +66,4 @@ $(window).load(function() {
     buttonPlayPause.bind('pointerdown', function() {
         sendCommand('play_pause');
     });
-
-    $('body').bind('pointerdown', function(evt) {
-        debug('pointergown');
-    });
-
-    $('body').bind('mousedown', function() {
-        debug('mousedown');
-    });
-
-    $('body').bind('touchstart', function() {
-        debug('touchstart');
-    });
-
 });
