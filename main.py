@@ -26,7 +26,7 @@ def setup_logging(root_logger, level=logging.DEBUG):
 
 
 def main():
-    setup_logging(logging.getLogger(''), level=logging.ERROR)
+    setup_logging(logging.getLogger(''), level=logging.DEBUG)
 
     print('\nKauko is now started, quit the program by pressing Ctrl - C')
     print('\nOpen the following address in your browser:')

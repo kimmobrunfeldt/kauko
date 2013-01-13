@@ -22,7 +22,7 @@
 }());
 
 // Place any jQuery/helper plugins in here.
-
+/*
 //  jQuery no-double-tap-zoom plugin
 //  Triple-licensed: Public Domain, MIT and WTFPL license - share and enjoy!
 //
@@ -49,3 +49,4 @@
         });
     };
 })(jQuery);
+*/
