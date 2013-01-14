@@ -26,7 +26,10 @@ function sendCommand(command, args, kwargs) {
         type: "POST",
         data: JSON.stringify([command, args, kwargs]),
         dataType: "json",
-        async: false
+        async: false,
+        error: function(xhr, textStatus, errorThrown) {
+            location.reload();
+        }
     });
 }
 
