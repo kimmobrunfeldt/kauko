@@ -20,12 +20,28 @@ How it works
 
 Computer runs a web server which serves the remote control web page for devices.
 
-WARNING: Using this program might be a security risk! Anyone who can access the web page, can control your computer.
+**WARNING:** Using this program might be a security risk! Anyone who can access the web page, can control your computer.
 
 Make it run
 -----------
 
-NOTE: The program needs super user privileges because it runs a web server on port 80 and simulates keyboard events.
+**NOTE:** The program needs super user privileges because it runs a web server on port 80 and simulates keyboard events.
+
+Easy way
+--------
+
+Simplest way to get Kauko running is to download the zipped Kauko.app from:
+https://github.com/kimmobrunfeldt/kauko/blob/master/dist/Kauko.zip?raw=true
+
+Unzip the Kauko.zip to for example Downloads folder and run Kauko in terminal:
+
+    cd  # Go to home
+    sudo Downloads/Kauko.app/Contents/MacOS/Kauko
+
+* **Don't** run the Kauko.app by double clicking it in Finder! It doesn't have any graphical interface yet so it has to be run in terminal.*
+
+Hard way
+--------
 
 1. Install gevent( http://www.gevent.org/ ) which is a package for Python. If you have pip installed, installing is simple:
 
