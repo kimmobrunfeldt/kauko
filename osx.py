@@ -3,7 +3,6 @@ OSX specific code.
 """
 
 import logging
-import os
 import subprocess
 import Quartz
 
@@ -19,13 +18,12 @@ from Quartz import CGDisplayPixelsHigh, CGDisplayPixelsWide
 from AppKit import NSEvent
 
 import computer
+import main
 
 logger = logging.getLogger(__name__)
-script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 # https://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html#//apple_ref/c/func/CGEventCreateMouseEvent
-
 class Mouse(computer.Mouse):
 
     def __init__(self):
@@ -140,7 +138,7 @@ class OSX(object):
     def toggle_sleep_display(self):
         display_is_asleep = Quartz.CGDisplayIsAsleep(0)
 
-        program_path = os.path.join(script_dir, 'vendor/SleepDisplay')
+        program_path = main.get_resource('vendor/SleepDisplay')
         if not display_is_asleep:
             subprocess.call([program_path])
 

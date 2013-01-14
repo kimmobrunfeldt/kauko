@@ -11,8 +11,12 @@ import os
 import urlparse
 
 import computer
+import main
 
+script_dir = os.path.dirname(os.path.realpath(__file__))
+logger = logging.getLogger(__name__)
 browserLogger = logging.getLogger('browser')
+
 
 
 def main_app(env, start_response):
@@ -60,11 +64,12 @@ def filepath(request_path):
     WARNING: This is not safe, one could use .. tricks to get into root path!!
     """
 
-    if not request_path.startswith('/'):
-        request_path += '/'
+    if request_path.startswith('/'):
+        request_path = request_path[1:]
 
-    this_path = os.path.dirname(__file__)
-    return os.path.abspath(this_path + request_path)
+    logger.debug(request_path)
+    logger.debug(main.get_resource(request_path))
+    return main.get_resource(request_path)
 
 
 def readfile(path):
