@@ -63,12 +63,9 @@ def filepath(request_path):
 
     WARNING: This is not safe, one could use .. tricks to get into root path!!
     """
-
     if request_path.startswith('/'):
         request_path = request_path[1:]
 
-    logger.debug(request_path)
-    logger.debug(main.get_resource(request_path))
     return main.get_resource(request_path)
 
 
