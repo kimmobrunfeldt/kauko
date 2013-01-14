@@ -38,9 +38,10 @@ NOTE: The program needs super user privileges because it runs a web server on po
 3. Browse to your computer's ip address with your device's browser.
    **main.py** prints the address you should browse to but it might not be correct.
 
+This has been tested and works well with iPad. However there are many problems with other devices and their browsers.
 
-Installing problems
--------------------
+Problems
+--------
 
 Installing Kauko to virtualenv causes problems with Quartz if --no-site-packages flag is used:
 
