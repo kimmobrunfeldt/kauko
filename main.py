@@ -25,6 +25,11 @@ import wsgiserver
 
 
 def setup_logging(root_logger, level=logging.DEBUG):
+
+    if root_logger.handlers:
+        for handler in root_logger.handlers:
+            root_logger.removeHandler(handler)
+
     if level == logging.DEBUG:
         format = '%(asctime)-15s %(name)-15s %(levelname)-8s %(message)s'
     else:

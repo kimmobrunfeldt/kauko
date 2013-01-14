@@ -70,8 +70,8 @@ $(window).load(function() {
         buttonFocusInput = $('#button-focus-input');
 
     callbacks = {
-        'onetap': function() {
-            sendCommand('mouse_click');
+        'onetap': function(double_click) {
+            sendCommand('mouse_click', [], {"double": double_click});
         },
         'twotap': function() {
             sendCommand('mouse_click', [], {button: 2});

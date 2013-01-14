@@ -7,7 +7,14 @@ import os
 import subprocess
 import Quartz
 
-from Quartz import CGPostMouseEvent, CGWarpMouseCursorPosition
+from Quartz import CGEventCreateMouseEvent, CGEventSetType
+from Quartz import CGEventPost, CGEventSetIntegerValueField
+from Quartz.CoreGraphics import kCGEventLeftMouseDown, kCGEventLeftMouseUp
+from Quartz.CoreGraphics import CGWarpMouseCursorPosition
+from Quartz.CoreGraphics import kCGEventRightMouseDown, kCGEventRightMouseUp
+from Quartz.CoreGraphics import kCGMouseButtonLeft, kCGMouseEventClickState
+from Quartz.CoreGraphics import kCGHIDEventTap
+
 from Quartz import CGDisplayPixelsHigh, CGDisplayPixelsWide
 from AppKit import NSEvent
 
@@ -17,14 +24,31 @@ logger = logging.getLogger(__name__)
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
+# https://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html#//apple_ref/c/func/CGEventCreateMouseEvent
+
 class Mouse(computer.Mouse):
+
+    def __init__(self):
+        logging.debug('Screen size: %s, %s' % self.screen_size())
+        self.max_x, self.max_y = self.screen_size()
+        self.max_x -= 1
+        self.max_y -= 1
+
     def press(self, x, y, button=1):
-        button_list = [0, 0, 0]
-        button_list[button - 1] = 1
-        CGPostMouseEvent((x, y), 1, 3, *button_list)
+        if button == 1:
+            mouse_type = kCGEventLeftMouseDown
+        else:
+            mouse_type = kCGEventRightMouseDown
+
+        self._mouse_event(mouse_type, x, y)
 
     def release(self, x, y, button=1):
-        CGPostMouseEvent((x, y), 1, 3, 0, 0, 0)
+        if button == 1:
+            mouse_type = kCGEventLeftMouseUp
+        else:
+            mouse_type = kCGEventRightMouseUp
+
+        self._mouse_event(mouse_type, x, y)
 
     def move(self, x, y):
         CGWarpMouseCursorPosition((float(x), float(y)))
@@ -35,6 +59,32 @@ class Mouse(computer.Mouse):
 
     def screen_size(self):
         return CGDisplayPixelsWide(0), CGDisplayPixelsHigh(0)
+
+    def double_click(self, x, y, button=1):
+        """button parameter is not currently used."""
+        event = CGEventCreateMouseEvent(
+                        None,
+                        kCGEventLeftMouseDown,
+                        (x, y),
+                        kCGMouseButtonLeft)
+
+        CGEventSetIntegerValueField(event, kCGMouseEventClickState, 2)
+        CGEventPost(kCGHIDEventTap, event)
+
+        CGEventSetType(event, kCGEventLeftMouseUp)
+        CGEventPost(kCGHIDEventTap, event)
+        CGEventSetType(event, kCGEventLeftMouseDown)
+        CGEventPost(kCGHIDEventTap, event)
+        CGEventSetType(event, kCGEventLeftMouseUp)
+        CGEventPost(kCGHIDEventTap, event)
+
+    def _mouse_event(self, mouse_type, x, y):
+        event = CGEventCreateMouseEvent(
+                    None,
+                    mouse_type,
+                    (x, y),
+                    kCGMouseButtonLeft)
+        CGEventPost(kCGHIDEventTap, event)
 
 
 class OSX(object):
@@ -140,7 +190,7 @@ class OSX(object):
 
         self.mouse.move(x, y)
 
-    def mouse_click(self, button=1):
+    def mouse_click(self, button=1, double=False):
         """Emulates mouse button click. Default is left click.
 
         Kwargs:
@@ -148,4 +198,7 @@ class OSX(object):
                     Button is defined as 1 = left, 2 = right, 3 = middle.
         """
         x, y = self.mouse.position()
-        self.mouse.click(x, y, button=button)
+        if double:
+            self.mouse.double_click(x, y, button=button)
+        else:
+            self.mouse.click(x, y, button=button)

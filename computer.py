@@ -74,7 +74,7 @@ class ExampleOS(object):
         If relative, moves cursor relative to current position.
         """
 
-    def mouse_click(self, button=1):
+    def mouse_click(self, button=1, double=False):
         """Emulates mouse button click. Default is left click.
 
         Kwargs:
@@ -123,6 +123,9 @@ class Mouse(object):
         """Get the current screen size in pixels.
         Returns a tuple of 2 integers"""
 
+        raise NotImplementedError
+
+    def double_click(self, x, y, button=1):
         raise NotImplementedError
 
 

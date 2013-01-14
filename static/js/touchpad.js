@@ -17,7 +17,9 @@ var TouchPad = (function(options) {
         startX,
         startY,
         lastX,
-        lastY
+        lastY,
+        lastOneTapTime = new Date().getTime(),
+        lastTwoTapTime = new Date().getTime(),
         downPointers = [];
 
     function init() {
@@ -65,9 +67,13 @@ var TouchPad = (function(options) {
         var x = event.originalEvent.clientX,
             y = event.originalEvent.clientY,
             xDiff = x - startX,
-            yDiff = y - startY;
+            yDiff = y - startY,
+            time = new Date().getTime(),
+            millisecondsSinceLastTwoTap = time - lastTwoTapTime;
 
-        if (Math.abs(xDiff) < options.maxTapDistance &&
+        if (millisecondsSinceLastTwoTap > 300 &&
+            downPointers.length === 1 &&
+            Math.abs(xDiff) < options.maxTapDistance &&
             Math.abs(yDiff) < options.maxTapDistance) {
             oneFingerTap(event);
         }
@@ -98,10 +104,18 @@ var TouchPad = (function(options) {
     }
 
     function oneFingerTap(event) {
-        options.callbacks['onetap']();
+        var time = new Date().getTime(),
+            double_click = false;
+
+        if (time - lastOneTapTime < 300) {
+            double_click = true;
+        }
+        options.callbacks['onetap'](double_click);
+        lastOneTapTime = new Date().getTime();
     }
 
     function twoFingerTap(event) {
+        lastTwoTapTime = new Date().getTime();
         options.callbacks['twotap']();
     }
 
