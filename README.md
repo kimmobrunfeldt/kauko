@@ -30,6 +30,8 @@ Make it run
 Easy way
 --------
 
+**The easy way doesn't work yet, working on it..**
+
 Simplest way to get Kauko running is to download the zipped Kauko.app from:
 https://github.com/kimmobrunfeldt/kauko/blob/master/dist/Kauko.zip?raw=true
 
@@ -38,7 +40,7 @@ Unzip the Kauko.zip to for example Downloads folder and run Kauko in terminal:
     cd  # Go to home
     sudo Downloads/Kauko.app/Contents/MacOS/Kauko
 
-***Don't** run the Kauko.app by double clicking it in Finder! It doesn't have any graphical interface yet so it has to be run in terminal.*
+**Don't** run the Kauko.app by double clicking it in Finder! It doesn't have any graphical interface yet so it has to be run in terminal.
 
 Hard way
 --------
