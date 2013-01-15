@@ -4,7 +4,18 @@ OSX specific code.
 
 import logging
 import subprocess
-import Quartz
+
+# If for example virtualenv is used, path to Apple's Quartz must be added
+# to Python path.
+try:
+    import Quartz
+except ImportError:
+    import sys
+    version = '%s.%s' % sys.version_info[:2]
+    sys.path.append('/System/Library/Frameworks/Python.framework/Versions/%s/Extras/lib/python/PyObjC' % version)
+
+    import Quartz
+
 
 from Quartz import CGEventCreateMouseEvent, CGEventSetType
 from Quartz import CGEventPost, CGEventSetIntegerValueField
