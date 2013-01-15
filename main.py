@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 Kauko server. Must be run as super user.
@@ -79,13 +79,12 @@ class NullLog(object):
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1].lower() in ['-h', '--help']:
+    argv = sys.argv[1:]
+    if '-h' in argv or '--help' in argv:
         print(__doc__.strip())
         sys.exit(0)
 
-    argv = sys.argv[1:]
     port = 80
-
     # Parse port from arguments
     success = True
     for param in ['-p', '--port']:
