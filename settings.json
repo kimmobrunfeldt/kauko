@@ -1,11 +1,11 @@
 {
     "keymap": {
-        "1": "toggle_sleep_display",
-        "2": "volume_up",
-        "3": "previous_track",
-        "3": "play_pause",
-        "4": "next_track",
-        "5": "toggle_mute",
-        "6": "volume_down"
+        "2": "toggle_sleep_display",
+        "3": "volume_up",
+        "4": "previous_track",
+        "5": "play_pause",
+        "6": "next_track",
+        "7": "toggle_mute",
+        "8": "volume_down"
     }
 }
