@@ -86,7 +86,7 @@ $(window).load(function() {
     touchPad = new TouchPad({element: divTouchPad, callbacks: callbacks});
 
     buttonToggleSleepDisplay.bind('pointerdown', function() {
-        sendCommand('toggle_sleep_display');
+        sendCommand('button_press', [2]);
     });
 
     buttonVolumeUp.bind('pointerdown', function() {
