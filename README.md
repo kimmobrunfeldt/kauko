@@ -55,6 +55,10 @@ Problems
 
 This has been tested and works well with iPad. However there are many problems with other devices and their browsers.
 
+    socket.error: [Errno 13] Permission denied: ('0.0.0.0', 80)
+
+**main.py** has to be run as super user.
+
 OSX
 ---
 
