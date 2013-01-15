@@ -25,7 +25,11 @@ Computer runs a web server which serves the remote control web page for devices.
 Installing
 ==========
 
-Kauko requires gevent( http://www.gevent.org/ ) module for Python.
+Kauko requires:
+ * gevent( http://www.gevent.org/ )
+ * PyMouse( https://github.com/pepijndevos/PyMouse )
+
+They are modules for Python.
 
 Virtualenv
 ----------
@@ -34,6 +38,7 @@ Installing to virtualenv is simple:
 
     mkvirtualenv --no-site-packages kauko
     pip install gevent
+    pip install PyMouse
     git clone https://github.com/kimmobrunfeldt/kauko.git
 
 
@@ -73,3 +78,30 @@ Supported operating systems
 ----------------------------
 
 Currently only OSX is supported, but any device that has a web browser can be used as a remote control.
+
+
+Attributions
+============
+
+Ideas
+-----
+
+Vesa Uimonen( https://github.com/vesauimonen/ ) gave ideas for this project.
+
+Icons
+-----
+Keyboard( http://thenounproject.com/noun/keyboard/#icon-No6006 ) designed by David Cadusseau( http://thenounproject.com/kaduma ) from The Noun Project
+Mouse( http://thenounproject.com/noun/mouse/#icon-No890 ) designed by Camila Bertoco( http://thenounproject.com/cbertoco ) from The Noun Project
+Next( http://thenounproject.com/noun/next/#icon-No8555 ) and many other icons designed by Jardson Araújo( http://thenounproject.com/jardsonaraujo ) from The Noun Project
+Mute( http://thenounproject.com/noun/mute/#icon-No3656 ) designed by Ben Rex Furneaux( http://thenounproject.com/benfurneaux ) from The Noun Project
+Close( http://thenounproject.com/noun/close/#icon-No6447 ) designed by Javier Cabezas( http://thenounproject.com/Xavi%20Caps ) from The Noun Project
+
+Background
+----------
+
+Background pattern( http://subtlepatterns.com/debut-dark/ ) is made by Luke McDonald.
+
+Other
+-----
+
+SleepDisplay( https://github.com/bigkm/SleepDisplay ) is developed by Kim Hunter.

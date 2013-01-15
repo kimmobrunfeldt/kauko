@@ -16,7 +16,7 @@ OPTIONS = {
         "CFBundleExecutable": "Kauko",
         "LSArchitecturePriority": "i386"
     },
-    'includes': ['gevent', 'greenlet'],
+    'includes': ['gevent', 'greenlet', 'pymouse'],
     'resources': ['vendor', 'static'],
 }
 
