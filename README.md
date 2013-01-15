@@ -1,5 +1,4 @@
-Kauko
-=====
+# Kauko
 
 Kauko is a remote control for computer. Turn almost any device into a remote control!
 
@@ -22,51 +21,49 @@ Computer runs a web server which serves the remote control web page for devices.
 
 **WARNING:** Using this program might be a security risk! Anyone who can access the web page, can control your computer.
 
+
+Installing
+==========
+
+Kauko requires gevent( http://www.gevent.org/ ) module for Python.
+
+Virtualenv
+----------
+
+Installing to virtualenv is simple:
+
+    mkvirtualenv --no-site-packages kauko
+    pip install gevent
+    git clone https://github.com/kimmobrunfeldt/kauko.git
+
+
 Make it run
 -----------
 
-**NOTE:** The program needs super user privileges because it runs a web server on port 80 and simulates keyboard events.
+The program needs super user privileges because it runs a web server on port 80 and simulates keyboard events.
 
-Easy way
---------
+After you have installed it run:
 
-**The easy way doesn't work yet, working on it..**
+    sudo python main.py
 
-Simplest way to get Kauko running is to download the zipped Kauko.app from:
-https://github.com/kimmobrunfeldt/kauko/blob/master/dist/Kauko.zip?raw=true
-
-Unzip the Kauko.zip to for example Downloads folder and run Kauko in terminal:
-
-    cd  # Go to home
-    sudo Downloads/Kauko.app/Contents/MacOS/Kauko
-
-**Don't** run the Kauko.app by double clicking it in Finder! It doesn't have any graphical interface yet so it has to be run in terminal.
-
-Hard way
---------
-
-1. Install gevent( http://www.gevent.org/ ) which is a package for Python. If you have pip installed, installing is simple:
-
-        pip install gevent
-
-2. Open terminal and run main.py
-
-        sudo ./main.py
-
-3. Browse to your computer's ip address with your device's browser.
+Then browse to your computer's ip address with your device's browser.
    **main.py** prints the address you should browse to but it might not be correct.
+
+
+Problems
+========
 
 This has been tested and works well with iPad. However there are many problems with other devices and their browsers.
 
-Problems
---------
-
-Installing Kauko to virtualenv causes problems with Quartz if --no-site-packages flag is used:
+OSX
+---
 
     ImportError: No module named Quartz
 
-Quartz is the library which is used to simulate keyboard and mouse events. Quartz is importable in OSX's default python located in **/usr/bin/python**.
+This shouldn't happen because Quartz's location is added to sys.path in **osx.py**.
 
+Anyway, Quartz is the library which is used to simulate keyboard and mouse events. Quartz is importable in OSX's default python located in **/usr/bin/python**.
+Module should be located in /System/Library/Frameworks/Python.framework/Versions/X.X/Extras/lib/python/PyObjC, where X.X corresponds to Python's version(e.g. 2.7).
 
 Supported operating systems
 ----------------------------
