@@ -144,7 +144,7 @@ $(window).load(function() {
         // Catch backspace and delete.
         if (e.keyCode === 8 || e.keyCode === 46) {
             // Key code 51 means backspace(delete) in apple script.
-            sendCommand('send_key', ['51'], {is_key_code: true});
+            sendCommand('send_key', ['8'], {is_ascii: true});
         }
     });
 
