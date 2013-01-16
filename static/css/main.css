@@ -1,4 +1,11 @@
+
 body, html {
+    height: 100%;
+    width: 100%;
+    background: url('../img/debut_dark.png') repeat;
+}
+
+.disable-mobile-defaults {
     -ms-touch-action: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -9,20 +16,6 @@ body, html {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: none;
-    height: 100%;
-    width: 100%;
-    background: url('../img/debut_dark.png') repeat;
-}
-
-.background-gradient {
-    background: rgb(242,242,242); /* Old browsers */
-    background: -moz-linear-gradient(left, rgba(242,242,242,1) 0%, rgba(232,232,232,1) 20%, rgba(214,214,214,1) 50%, rgba(232,232,232,1) 80%, rgba(242,242,242,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(242,242,242,1)), color-stop(20%,rgba(232,232,232,1)), color-stop(50%,rgba(214,214,214,1)), color-stop(80%,rgba(232,232,232,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(left, rgba(242,242,242,1) 0%,rgba(232,232,232,1) 20%,rgba(214,214,214,1) 50%,rgba(232,232,232,1) 80%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(left, rgba(242,242,242,1) 0%,rgba(232,232,232,1) 20%,rgba(214,214,214,1) 50%,rgba(232,232,232,1) 80%,rgba(242,242,242,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(left, rgba(242,242,242,1) 0%,rgba(232,232,232,1) 20%,rgba(214,214,214,1) 50%,rgba(232,232,232,1) 80%,rgba(242,242,242,1) 100%); /* IE10+ */
-    background: linear-gradient(to right, rgba(242,242,242,1) 0%,rgba(232,232,232,1) 20%,rgba(214,214,214,1) 50%,rgba(232,232,232,1) 80%,rgba(242,242,242,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
 }
 
 .silver-gradient {
@@ -36,22 +29,35 @@ body, html {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4c4c4', endColorstr='#878787',GradientType=1 ); /* IE6-9 */
 }
 
+.row-fluid:first-child {
+    padding-top: 60px;
+}
+
 .row-fluid {
     text-align: center;
     padding-bottom: 30px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.btn {
+.btn-large {
     width: 100px;
     height: 90px;
+    font-size: 40px;
     -webkit-border-radius: 45px;
+    -moz-border-radius: 45px;
     border-radius: 45px;
 }
 
-.btn-mute {
+.btn-small {
     margin-top: 11px;
     width: 75px;
     height: 67.5px;
+    font-size: 30px;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
 }
 
 .top-border-radius {
@@ -71,22 +77,8 @@ body, html {
     border-left: 1px solid #aaa;
     width: 500px;
     min-height: 100%;
-    box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.2),
-                -5px 0px 20px rgba(0, 0, 0, 0.2);
-}
-
-.top-controls {
-    padding-top: 60px;
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.media-controls {
-    padding-top: 80px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 400px;
+    box-shadow: 10px 0 20px rgba(0, 0, 0, 0.2),
+                -5px 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .fullscreen {
@@ -99,33 +91,39 @@ body, html {
 }
 
 .touch-pad {
-    display: none;
-    background: #eee;
-}
-
-.keyboard {
-    display: none;
-    background: #eee;
-    text-align: center;
-}
-
-.keyboard .input-wrapper {
-    position: absolute;
-    text-align: center;
-    top: 45px;
     width: 100%;
-    padding-top: 30px;
+    height: 100%;
+    background: #eee;
 }
 
-.keyboard input:focus {
+.control-layer {
+    display: none;
+    background: #eee;
+    text-align: center;
+}
+
+.control-layer .input-corner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.control-layer .input-corner h1 {
+    float: left;
+}
+
+.control-layer .input-wrapper {
+    text-align: center;
+}
+
+.control-layer input:focus {
     outline: none;
 }
 
-.keyboard input {
+.control-layer input {
     width: 100px;
     background: #eee;
     border: 3px dashed #444;
-    outline: none;
     box-shadow: none;
     text-align: center;
     height: 100px;
