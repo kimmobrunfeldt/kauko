@@ -13,6 +13,7 @@ import urlparse
 
 import operatingsystem
 import path
+from settings import settings
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 logger = logging.getLogger(__name__)
@@ -29,6 +30,9 @@ def main_app(env, start_response):
 
     if request_path == '/debug':
         return debug(env, start_response)
+
+    elif request_path == '/settings':
+        return get_settings(env, start_response)
 
     elif request_path == '/command':
         data = json.loads(get_post_data(env))
@@ -54,6 +58,11 @@ def debug(env, start_response):
 
     start_response('200 OK', [])
     return ['']
+
+
+def get_settings(env, start_response):
+    start_response('200 OK', [('Content-Type', 'application/json')])
+    return [json.dumps(settings)]
 
 
 # Functions for responding to file requests etc.
