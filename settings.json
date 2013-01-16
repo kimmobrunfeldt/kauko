@@ -1,11 +1,19 @@
 {
+
+    "buttons": [
+        [{"id": "button-control-layer", "icon": "default/keyboard.png", "autoSend": false}, {"id": "button-mute", "icon": "default/mute.png"}, {"id": "button-power", "icon": "default/power.png", "cssClasses": "btn-danger"}],
+        [null, null, null],
+        [null, {"id": "button-plus", "icon": "default/plus.png"}, null],
+        [{"id": "button-arrows-left", "icon": "default/arrows-left.png"}, {"id": "button-play-pause", "icon": "default/play-pause.png"}, {"id": "button-arrows-right", "icon": "default/arrows-right.png"}],
+        [null, {"id": "button-minus", "icon": "default/minus.png"}, null]
+    ],
     "keymap": {
-        "2": "toggle_sleep_display",
-        "3": "volume_up",
-        "4": "previous_track",
-        "5": "play_pause",
-        "6": "next_track",
-        "7": "toggle_mute",
-        "8": "volume_down"
+        "button-power": "toggle_sleep_display",
+        "button-plus": "volume_up",
+        "button-arrows-left": "previous_track",
+        "button-play-pause": "play_pause",
+        "button-arrows-right": "next_track",
+        "button-mute": "toggle_mute",
+        "button-minus": "volume_down"
     }
 }
