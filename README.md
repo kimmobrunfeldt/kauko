@@ -77,4 +77,6 @@ Module should be located in /System/Library/Frameworks/Python.framework/Versions
 Supported operating systems
 ----------------------------
 
-Currently only OSX is supported, but any device that has a web browser can be used as a remote control.
+In theory any device which has a web browser can be used as a remote control.
+
+OSX and Linux are supported from computer operating systems.
