@@ -1,5 +1,8 @@
 """
 WSGI middleware app to serve static files and the controlling system.
+
+WARNING: Do NOT use this as a public web server in any way, this is not safe.
+         The static file server has not been built against any threats.
 """
 
 import json

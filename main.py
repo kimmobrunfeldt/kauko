@@ -15,9 +15,6 @@ Options:
   -p --port=<port>          Web server's listening port.
 """
 
-# WARNING: Do NOT use this as a public web server in any way, this is not safe.
-#          The static file server has not been built against any threats.
-
 import logging
 import socket
 import sys
