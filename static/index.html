@@ -33,84 +33,23 @@
 
   </head>
 
-  <body touch-action="none">
+  <body touch-action="none" class="disable-mobile-defaults">
 
-    <div id="div-touch-pad" class="fullscreen touch-pad">
-      <img id="button-close-touch-pad" class="button-close" src="/static/img/close.png" alt="Close">
-    </div>
+    <div id="control-layer" class="fullscreen control-layer disable-mobile-defaults">
+      <img id="button-close-control-layer" class="button-close" src="/static/img/close.png" alt="Close">
 
-    <div id="div-keyboard" class="fullscreen keyboard">
-      <img id="button-close-keyboard" class="button-close" src="/static/img/close.png" alt="Close">
-      <h1>Write here</h1>
-      <div class="input-wrapper">
-        <input type="text" id="input-keyboard">
+      <div class="input-corner">
+        <div class="input-wrapper">
+          <input type="text" id="input-keyboard">
+        </div>
+      </div>
+
+      <div id="touch-pad" class="touch-pad">
       </div>
     </div>
 
-    <div touch-action="none" class="silver-gradient top-border-radius container">
-
-      <div class="top-controls row-fluid">
-        <div class="span4">
-          <button type="button" class="btn-inverse btn btn-large" id="button-keyboard">
-            <img src="/static/img/keyboard-light.png" alt="Keyboard">
-          </button>
-        </div>
-        <div class="span4">
-          <button type="button" class="btn-inverse btn btn-large" id="button-touch-pad">
-            <img src="/static/img/mouse-light.png" alt="Mouse">
-          </button>
-        </div>
-        <div class="span4">
-          <button type="button" class="btn btn-large btn-danger" id="button-toggle-sleep-display">
-            <img src="/static/img/sleep-display.png" alt="Sleep display">
-          </button>
-        </div>
-      </div>
-
-      <div class="media-controls">
-        <div class="row-fluid">
-          <div class="span4"></div>
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-large" id="button-volume-up">
-              <img src="/static/img/plus-light.png" alt="Volume up">
-            </button>
-          </div>
-          <div class="span4"></div>
-        </div>
-
-        <div class="row-fluid">
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-large" id="button-previous-track">
-              <img src="/static/img/rewind-light.png" alt="Previous track">
-            </button>
-          </div>
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-large" id="button-play-pause">
-              <img src="/static/img/play-pause-light.png" alt="Play/Pause">
-            </button>
-          </div>
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-large" id="button-next-track">
-              <img src="/static/img/forward-light.png" alt="Next track">
-            </button>
-          </div>
-        </div>
-
-        <div class="row-fluid">
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-mute" id="button-mute">
-              <img src="/static/img/mute-light.png" alt="Mute">
-            </button>
-          </div>
-          <div class="span4">
-            <button type="button" class="btn-inverse btn btn-large" id="button-volume-down">
-              <img src="/static/img/minus-light.png" alt="Volume down">
-            </button>
-          </div>
-          <div class="span4"></div>
-        </div>
-      </div>
-
+    <div id="remote-control" touch-action="none" class="silver-gradient top-border-radius container disable-mobile-defaults">
+      <!-- This will be populated with button grid by remotecontrol.js -->
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
@@ -119,6 +58,7 @@
     <script src="/static/js/bootstrap.js"></script>
     <script src="/static/js/pointerevents.js"></script>
     <script src="/static/js/touchpad.js"></script>
+    <script src="/static/js/remotecontrol.js"></script>
     <script src="/static/js/main.js"></script>
 
   </body>
