@@ -38,7 +38,9 @@ var RemoteControl = (function(options) {
     // Public methods
     //
 
+    my.draw = function() {
 
+    };
 
     //
     // Private methods
