@@ -1,15 +1,18 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 Kauko server. Must be run as super user.
 
 Usage:
-  sudo ./main.py -v -d
+  sudo python main.py -v -d
+  sudo python main.py -p 8080
+
 
 Options:
   -h --help                 Prints this help.
   -v --verbose              Used commands are printed to console.
   -d --debug                Debug information is printed to console.
+  -p --port=<port>          Web server's listening port.
 """
 
 # WARNING: Do NOT use this as a public web server in any way, this is not safe.
@@ -21,7 +24,7 @@ import sys
 
 from gevent import pywsgi
 
-import wsgiserver
+import kauko.wsgiserver as wsgiserver
 
 
 def setup_logging(root_logger, level=logging.DEBUG):
@@ -53,12 +56,38 @@ class NullLog(object):
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1].lower() in ['-h', '--help']:
+    argv = sys.argv[1:]
+    if '-h' in argv or '--help' in argv:
         print(__doc__.strip())
         sys.exit(0)
 
-    verbose_flag = '-v' in sys.argv[1:] or '--verbose' in sys.argv[1:]
-    debug_flag = '-d' in sys.argv[1:] or '--debug' in sys.argv[1:]
+    port = 80
+    # Parse port from arguments
+    success = True
+    for param in ['-p', '--port']:
+        if param in argv:
+            # Find the index of -p or --port from argv list
+            try:
+                i = argv.index(param)
+            except ValueError:
+                success = False
+                break
+
+            # Try to convert the following argument to port number.
+            try:
+                port = int(argv[i + 1])
+                if not 1 <= port <= 65535:
+                    raise ValueError  # Invalid port number
+            except (ValueError, IndexError):
+                success = False
+                break
+
+    if not success:
+        print('Error: Invalid port number.\nUse number between 1-65535.')
+        sys.exit(1)
+
+    verbose_flag = '-v' in argv or '--verbose' in argv
+    debug_flag = '-d' in argv or '--debug' in argv
 
     logging_level = logging.WARNING
     if verbose_flag:
@@ -72,7 +101,11 @@ def main():
 
     print('\nKauko is now started, quit the program by pressing Ctrl - C')
     print('\nOpen the following address in your browser:')
-    print('http://%s' % socket.gethostbyname(socket.gethostname()))
+
+    address = 'http://%s' % socket.gethostbyname(socket.gethostname())
+    if port != 80:
+        address += ':%s' % port
+    print(address)
 
     # Serve static files and routes with wsgi app
     if logging_level > logging.DEBUG:
@@ -80,9 +113,10 @@ def main():
     else:
         log = 'default'  # Uses gevent's default logging -> stdout
 
-    http_server = pywsgi.WSGIServer(('0.0.0.0', 8080), wsgiserver.main_app,
+    http_server = pywsgi.WSGIServer(('0.0.0.0', port), wsgiserver.main_app,
                                     log=log)
     http_server.serve_forever()
+
 
 if __name__ == '__main__':
     try:

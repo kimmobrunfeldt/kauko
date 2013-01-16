@@ -3,62 +3,39 @@ OSX specific code.
 """
 
 import logging
-import os
 import subprocess
-import Quartz
+
+# If for example virtualenv is used, path to Apple's Quartz must be added
+# to Python path.
+try:
+    import Quartz
+except ImportError:
+    import sys
+    version = '%s.%s' % sys.version_info[:2]
+    sys.path.append('/System/Library/Frameworks/Python.framework/Versions/%s/Extras/lib/python/PyObjC' % version)
+
+    import Quartz
 
 from Quartz import CGEventCreateMouseEvent, CGEventSetType
 from Quartz import CGEventPost, CGEventSetIntegerValueField
 from Quartz.CoreGraphics import kCGEventLeftMouseDown, kCGEventLeftMouseUp
 from Quartz.CoreGraphics import CGWarpMouseCursorPosition
-from Quartz.CoreGraphics import kCGEventRightMouseDown, kCGEventRightMouseUp
 from Quartz.CoreGraphics import kCGMouseButtonLeft, kCGMouseEventClickState
 from Quartz.CoreGraphics import kCGHIDEventTap
 
-from Quartz import CGDisplayPixelsHigh, CGDisplayPixelsWide
-from AppKit import NSEvent
+import pymouse
 
-import computer
+import path
 
 logger = logging.getLogger(__name__)
-script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 # https://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html#//apple_ref/c/func/CGEventCreateMouseEvent
-
-class Mouse(computer.Mouse):
-
-    def __init__(self):
-        logging.debug('Screen size: %s, %s' % self.screen_size())
-        self.max_x, self.max_y = self.screen_size()
-        self.max_x -= 1
-        self.max_y -= 1
-
-    def press(self, x, y, button=1):
-        if button == 1:
-            mouse_type = kCGEventLeftMouseDown
-        else:
-            mouse_type = kCGEventRightMouseDown
-
-        self._mouse_event(mouse_type, x, y)
-
-    def release(self, x, y, button=1):
-        if button == 1:
-            mouse_type = kCGEventLeftMouseUp
-        else:
-            mouse_type = kCGEventRightMouseUp
-
-        self._mouse_event(mouse_type, x, y)
+class PyMouse(pymouse.PyMouse):
+    """Adds double click and uses different function to move mouse."""
 
     def move(self, x, y):
         CGWarpMouseCursorPosition((float(x), float(y)))
-
-    def position(self):
-        loc = NSEvent.mouseLocation()
-        return loc.x, CGDisplayPixelsHigh(0) - loc.y
-
-    def screen_size(self):
-        return CGDisplayPixelsWide(0), CGDisplayPixelsHigh(0)
 
     def double_click(self, x, y, button=1):
         """button parameter is not currently used."""
@@ -76,14 +53,6 @@ class Mouse(computer.Mouse):
         CGEventSetType(event, kCGEventLeftMouseDown)
         CGEventPost(kCGHIDEventTap, event)
         CGEventSetType(event, kCGEventLeftMouseUp)
-        CGEventPost(kCGHIDEventTap, event)
-
-    def _mouse_event(self, mouse_type, x, y):
-        event = CGEventCreateMouseEvent(
-                    None,
-                    mouse_type,
-                    (x, y),
-                    kCGMouseButtonLeft)
         CGEventPost(kCGHIDEventTap, event)
 
 
@@ -105,7 +74,7 @@ class OSX(object):
 
     def __init__(self):
         super(OSX, self).__init__()
-        self.mouse = Mouse()
+        self.mouse = PyMouse()
 
     def _run(self, code):
         logging.debug('Running "%s"' % code)
@@ -140,7 +109,7 @@ class OSX(object):
     def toggle_sleep_display(self):
         display_is_asleep = Quartz.CGDisplayIsAsleep(0)
 
-        program_path = os.path.join(script_dir, 'vendor/SleepDisplay')
+        program_path = path.get_resource('vendor/SleepDisplay')
         if not display_is_asleep:
             subprocess.call([program_path])
 

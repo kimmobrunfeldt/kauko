@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 """
 WSGI middleware app to serve static files and the controlling system.
 """
@@ -10,8 +8,11 @@ import mimetypes
 import os
 import urlparse
 
-import computer
+import operatingsystem
+import path
 
+script_dir = os.path.dirname(os.path.realpath(__file__))
+logger = logging.getLogger(__name__)
 browserLogger = logging.getLogger('browser')
 
 
@@ -29,7 +30,7 @@ def main_app(env, start_response):
     elif request_path == '/command':
         data = json.loads(get_post_data(env))
         command, args, kwargs = data[0], data[1], data[2]
-        computer.command(command, args, kwargs)
+        operatingsystem.command(command, args, kwargs)
 
         start_response('200 OK', [])
         return ['']
@@ -59,12 +60,10 @@ def filepath(request_path):
 
     WARNING: This is not safe, one could use .. tricks to get into root path!!
     """
+    if request_path.startswith('/'):
+        request_path = request_path[1:]
 
-    if not request_path.startswith('/'):
-        request_path += '/'
-
-    this_path = os.path.dirname(__file__)
-    return os.path.abspath(this_path + request_path)
+    return path.get_resource(request_path)
 
 
 def readfile(path):

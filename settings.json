@@ -1,0 +1,11 @@
+{
+    "keymap": {
+        "2": "toggle_sleep_display",
+        "3": "volume_up",
+        "4": "previous_track",
+        "5": "play_pause",
+        "6": "next_track",
+        "7": "toggle_mute",
+        "8": "volume_down"
+    }
+}

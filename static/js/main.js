@@ -86,7 +86,7 @@ $(window).load(function() {
     touchPad = new TouchPad({element: divTouchPad, callbacks: callbacks});
 
     buttonToggleSleepDisplay.bind('pointerdown', function() {
-        sendCommand('toggle_sleep_display');
+        sendCommand('button_press', [2]);
     });
 
     buttonVolumeUp.bind('pointerdown', function() {
@@ -140,14 +140,15 @@ $(window).load(function() {
         }, 700);
     });
 
-    // Capture backspace
     inputKeyboard.keydown(function(e) {
-        if (e.keyCode === 8) {
+        // Catch backspace and delete.
+        if (e.keyCode === 8 || e.keyCode === 46) {
             // Key code 51 means backspace(delete) in apple script.
             sendCommand('send_key', ['51'], {is_key_code: true});
         }
     });
 
+    // Prevent user from unfocusing the keyboard input.
     inputKeyboard.blur(function() {
         var isVisible = inputKeyboard.is(':visible');
         if (isVisible) {
