@@ -80,7 +80,7 @@ def main():
     else:
         log = 'default'  # Uses gevent's default logging -> stdout
 
-    http_server = pywsgi.WSGIServer(('0.0.0.0', 80), wsgiserver.main_app,
+    http_server = pywsgi.WSGIServer(('0.0.0.0', 8080), wsgiserver.main_app,
                                     log=log)
     http_server.serve_forever()
 
