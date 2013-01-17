@@ -49,7 +49,6 @@ elif os.name == 'nt':
 elif os.name == 'posix':
     import xlib
     _current_os = xlib.xlib()
-#    raise NotImplemented('Linux in not supported yet.')
 
 
 def command(command, args, kwargs):
