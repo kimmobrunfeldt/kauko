@@ -19,9 +19,6 @@ var RemoteControl = (function(options) {
         ]
         Where each non-null element is the options to initialize Button with.
 
-    options.defaultClasses:
-        The default CSS classes that are added for a button.
-
     */
 
     var defaultOptions = {
