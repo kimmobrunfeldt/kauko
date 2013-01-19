@@ -6,6 +6,7 @@ Uses 'xtest'-extension of X.
 
 import logging
 import os
+import subprocess
 
 import pymouse
 import Xlib
@@ -13,6 +14,7 @@ import Xlib.X
 import Xlib.XK
 import Xlib.display
 import Xlib.protocol.event
+import Xlib.keysymdef.xkb
 
 import operatingsystem
 
@@ -28,45 +30,10 @@ class Mouse(pymouse.PyMouse):
         self.click(x, y, button)
 
 
-# Keyboard class needs these
 special_X_keysyms = {
-    ' ': "space",
-    '\t': "Tab",
-    '\n': "Return",  # for some reason this needs to be cr, not lf
-    '\r': "Return",
-    '\e': "Escape",
-    '!': "exclam",
-    '#': "numbersign",
-    '%': "percent",
-    '$': "dollar",
-    '&': "ampersand",
-    '"': "quotedbl",
-    '\'': "apostrophe",
-    '(': "parenleft",
-    ')': "parenright",
-    '*': "asterisk",
-    '=': "equal",
-    '+': "plus",
-    ',': "comma",
-    '-': "minus",
-    '.': "period",
-    '/': "slash",
-    ':': "colon",
-    ';': "semicolon",
-    '<': "less",
-    '>': "greater",
-    '?': "question",
-    '@': "at",
-    '[': "bracketleft",
-    ']': "bracketright",
-    '\\': "backslash",
-    '^': "asciicircum",
-    '_': "underscore",
-    '`': "grave",
-    '{': "braceleft",
-    '|': "bar",
-    '}': "braceright",
-    '~': "asciitilde"
+    u'\x08': "BackSpace",
+    u'\n': "Return",  # for some reason this needs to be cr, not lf
+    u'\r': "Return",
 }
 
 
@@ -78,6 +45,10 @@ class Keyboard(object):
     Simulate keypresses under X11.
     """
 
+    # Keysyms for modifier keys
+    KEYSYM_ALTGR = Xlib.keysymdef.xkb.XK_ISO_Level3_Shift
+    KEYSYM_SHIFT = Xlib.XK.string_to_keysym('Shift_L')
+
     def __init__(self, display):
         super(Keyboard, self).__init__()
 
@@ -85,53 +56,67 @@ class Keyboard(object):
 
     def send_string(self, string):
         for char in string:
-            keycode, shift_mask = self._char_to_keycode(char)
-            if shift_mask != 0:
-                Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, 50)
+            self.send_ord(ord(char))
 
-            Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, keycode)
-            Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, keycode)
-
-            if shift_mask != 0:
-                Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, 50)
-
-        self._display.sync()
-
-    def send_keycode(self, key):
-        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, key)
-        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, key)
+    def send_keycode(self, keycode):
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, keycode)
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, keycode)
         self._display.sync()
 
     def send_keysym(self, keysym):
-        key = self._display.keysym_to_keycode(keysym)
-        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, key)
-        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, key)
+        keycode = self._display.keysym_to_keycode(keysym)
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, keycode)
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, keycode)
         self._display.sync()
 
-    def _get_keysym(self, char):
-        keysym = Xlib.XK.string_to_keysym(char)
-        if keysym == 0:
-            # Unfortunately, although this works to get the correct keysym
-            # i.e. keysym for '#' is returned as "numbersign"
-            # the subsequent display.keysym_to_keycode("numbersign") is 0.
-            keysym = Xlib.XK.string_to_keysym(special_X_keysyms[char])
-        return keysym
+    def send_ord(self, char_ord):
+        """Sends character based on it's unicode value.
+        For example, char_ord = 228, would send u'\xe4'.
+        ord(u'\xe4') == 228
+        """
+        keycodes = self._keysym_to_keycode(char_ord)
 
-    def _is_shifted(self, char):
-        return char.isupper() or char in "~!@#$%^&*()_+{}|:\"<>?"
+        if keycodes is None:
+            try:
+                keysym_short = special_X_keysyms[unichr(char_ord)]
+            except KeyError:
+                logger.error('Could not send keysym %s.' % char_ord)
+                return
 
-    def _char_to_keycode(self, char):
-        keysym = self._get_keysym(char)
-        keycode = self._display.keysym_to_keycode(keysym)
-        if keycode == 0:
-            logger.error('Cannot map %s.' % char)
+            keysym = Xlib.XK.string_to_keysym(keysym_short)
+            keycodes = self._keysym_to_keycode(keysym)
+            if keycodes is None:
+                logger.error('Could not send %s %s.' % (keysym_short, keysym))
+                return
 
-        if self._is_shifted(char):
-            shift_mask = Xlib.X.ShiftMask
-        else:
-            shift_mask = 0
+        keycode, modifier = keycodes[0]
 
-        return keycode, shift_mask
+        # If the modifier is 1 use shift, otherwise use alt gr
+        modifier_keysym = self.KEYSYM_SHIFT
+        if modifier != 1:
+            modifier_keysym = self.KEYSYM_ALTGR
+
+        modifier_keycode = self._display.keysym_to_keycode(modifier_keysym)
+
+        if modifier:
+            Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress,
+                                      modifier_keycode)
+
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyPress, keycode)
+        Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease, keycode)
+
+        if modifier:
+            Xlib.ext.xtest.fake_input(self._display, Xlib.X.KeyRelease,
+                                      modifier_keycode)
+
+        self._display.sync()
+
+    def _keysym_to_keycode(self, keysym):
+        keycodes = self._display.keysym_to_keycodes(keysym)
+        if len(keycodes) > 0:
+            return keycodes
+
+        return None
 
 
 class Linux(operatingsystem.BaseOS):
@@ -163,9 +148,9 @@ class Linux(operatingsystem.BaseOS):
 
     def toggle_sleep_display(self):
         if not self._display_is_asleep:
-            self._display.force_screen_saver(Xlib.X.ScreenSaverActive)
+            subprocess.call(['xset', 'dpms', 'force', 'off'])
         else:
-            self._display.force_screen_saver(Xlib.X.ScreenSaverReset)
+            subprocess.call(['xset', 'dpms', 'force', 'on'])
         self._display_is_asleep = not self._display_is_asleep
 
     def volume_up(self):
@@ -189,8 +174,7 @@ class Linux(operatingsystem.BaseOS):
     def send_key(self, key, is_ascii=False, key_type="str"):
         if is_ascii:
             try:
-                key = int(key)
-                key_type = "keycode"
+                key = chr(int(key))
             except TypeError:
                 logger.warning("Cant send ascii key: %s, not numeric" % (key))
                 return
@@ -198,10 +182,10 @@ class Linux(operatingsystem.BaseOS):
         logger.debug("send_key %s, type: %s" % (key, key_type))
 
         if key_type == "str":
-            self._keyboard.send_string(key, self._display)
+            self._keyboard.send_string(key)
         elif key_type == "keycode":
-            self._keyboard.send_keycode(key, self._display)
+            self._keyboard.send_keycode(key)
         elif key_type == "keysym":
-            self._keyboard.send_keysym(key, self._display)
+            self._keyboard.send_keysym(key)
         else:
             logger.error("Unknown type of key %s" % key_type)
