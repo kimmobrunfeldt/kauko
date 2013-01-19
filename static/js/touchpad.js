@@ -101,6 +101,14 @@ var TouchPad = (function(options) {
         options.element.bind('pointerup', function(evt) {
             my.pointerUp(evt);
         });
+
+        options.element.bind('pointerout', function(evt) {
+            downPointers = [];
+        });
+
+        options.element.bind('pointercancel', function(evt) {
+            downPointers = [];
+        });
     }
 
     function oneFingerTap(event) {
