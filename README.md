@@ -52,7 +52,7 @@ OSX
 
 Start the terminal application and follow the instructions.
 
-**First install [pip](http://pypi.python.org/pypi/pip):**
+Install [pip](http://pypi.python.org/pypi/pip):
 
     mkdir build
     cd build
@@ -65,7 +65,7 @@ Note that gevent starts using [libev](http://software.schmorp.de/pkg/libev.html)
 
 At the time of writing, pip installs gevent which uses libevent.
 
-**Installing libevent:**
+Installing libevent:
 
 **To ease your job, a few of the following commands use a wildcard.
 You MUST make sure that before you execute these commands,
@@ -90,8 +90,8 @@ If you don't care about virtualenv:
     git clone https://github.com/kimmobrunfeldt/kauko.git
     cd kauko
 
-Linux(Ubunt and other Debian based)
------------------------------------
+Linux(Ubuntu and other Debian based)
+------------------------------------
 
 Run the following commands in terminal:
 
