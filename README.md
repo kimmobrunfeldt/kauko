@@ -41,8 +41,8 @@ Installing
 ==========
 
 Kauko requires:
- * gevent( http://www.gevent.org/ )
- * PyMouse( https://github.com/pepijndevos/PyMouse )
+ * [gevent](http://www.gevent.org/)
+ * [PyMouse](https://github.com/pepijndevos/PyMouse)
 
 They are modules for Python.
 
@@ -52,7 +52,7 @@ OSX
 
 Start the terminal application and follow the instructions.
 
-First install [pip](http://pypi.python.org/pypi/pip):
+**First install [pip](http://pypi.python.org/pypi/pip):**
 
     mkdir build
     cd build
@@ -65,15 +65,13 @@ Note that gevent starts using [libev](http://software.schmorp.de/pkg/libev.html)
 
 At the time of writing, pip installs gevent which uses libevent.
 
-Installing libevent:
+**Installing libevent:**
 
-**NOTE**
-
-*To ease your job, a few of the following commands use a wildcard.
+**To ease your job, a few of the following commands use a wildcard.
 You MUST make sure that before you execute these commands,
-you don't have any earlier versions of libevent in your Downloads directory!*
+you don't have any earlier versions of libevent in your Downloads directory!**
 
-Download the latest stable libevent tar ball from http://libevent.org to your Downloads directory and run the following commands:
+Download the latest stable libevent **.tar.gz** file from http://libevent.org to your Downloads directory and run the following commands:
 
     mv ~/Downloads/libevent-*-stable.tar.gz .
     tar xvvf libevent-*-stable.tar.gz
@@ -92,17 +90,19 @@ If you don't care about virtualenv:
     git clone https://github.com/kimmobrunfeldt/kauko.git
     cd kauko
 
-Linux(Debian based)
--------------------
+Linux(Ubunt and other Debian based)
+-----------------------------------
+
+Run the following commands in terminal:
 
     # gevent needs python-dev and libevent
     sudo apt-get install git python-pip python-dev libevent-dev
 
-    # ** READ THIS **
-    # At this point you have to choose if you want the installation inside
-    # a virtualenv or not. If you want it, move to https://github.com/kimmobrunfeldt/kauko#virtualenv
+At this point you have to choose if you want the installation inside
+a virtualenv or not. If you want it, move to [Virtualenv](https://github.com/kimmobrunfeldt/kauko#virtualenv).
 
-    # Continue here if you don't care about virtualenv:
+If you don't care about virtualenv:
+
     sudo pip install gevent
     sudo pip install PyMouse
 
