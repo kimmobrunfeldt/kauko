@@ -43,6 +43,15 @@ class Keyboard(object):
     a Python version of crikey,
     http://shallowsky.com/software/crikey
     Simulate keypresses under X11.
+
+    This is how xte from xautomation does emulating strings:
+    http://sourcecodebrowser.com/xautomation/1.03/xte_8c.html#a663f8d2c2df1e8f889ee4d257e2b57f7
+
+    keysym term means a constant that Xlib uses to identify each key. They
+    do not depend on the keyboard layout.
+
+    keycode means the raw keycode which Xlib will send based on keysym.
+    keycode depends on the keyboard layout
     """
 
     # Keysyms for modifier keys
@@ -74,6 +83,7 @@ class Keyboard(object):
         For example, char_ord = 228, would send u'\xe4'.
         ord(u'\xe4') == 228
         """
+        # List of (keycode, modifier) pairs which produce the given char.
         keycodes = self._keysym_to_keycode(char_ord)
 
         if keycodes is None:
@@ -90,6 +100,18 @@ class Keyboard(object):
                 return
 
         keycode, modifier = keycodes[0]
+
+        # I didn't figure out how to use the returned modifier in a common
+        # case. I just decided that 1 is shift and others use alt gr.
+        # It doesn't work for dead keys etc.
+        # I tried to:
+        #  mapping = self._display.get_modifier_mapping()
+        #  modifier_key = mapping[modifier - 1][0]
+        #
+        # But for example character @(64) did not produce the right modifier.
+        # It should have produced alt gr, but the keycode was not correct.
+        # Even though the Xlib.display.keycode_to_keysym(key, index) told that
+        # the returned pair would produce character @, it actually did not.
 
         # If the modifier is 1 use shift, otherwise use alt gr
         modifier_keysym = self.KEYSYM_SHIFT
