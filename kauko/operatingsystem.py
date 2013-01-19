@@ -36,6 +36,33 @@ ALLOWED_METHODS = [
 BUTTON_PRESS_COMMAND = 'button_press'
 
 
+class BaseOS(object):
+    """Base class for other OS classes."""
+
+    def mouse_move(self, x, y, relative=True):
+        """Moves mouse cursor to x, y in screen."""
+
+        if relative:
+            current_x, current_y = self._mouse.position()
+            x = current_x + x
+            y = current_y + y
+
+        self._mouse.move(x, y)
+
+    def mouse_click(self, button=1, double=False):
+        """Emulates mouse button click. Default is left click.
+
+        Kwargs:
+            button: What button of the mouse to emulate.
+                    Button is defined as 1 = left, 2 = right, 3 = middle.
+        """
+        x, y = self._mouse.position()
+        if double:
+            self._mouse.double_click(x, y, button=button)
+        else:
+            self._mouse.click(x, y, button=button)
+
+
 # Mac
 if sys.platform.startswith('darwin'):
     import osx
@@ -47,8 +74,8 @@ elif os.name == 'nt':
 
 # *nix(Linux etc.)
 elif os.name == 'posix':
-    import xlib
-    _current_os = xlib.xlib()
+    import linux
+    _current_os = linux.Linux()
 
 
 def command(command, args, kwargs):

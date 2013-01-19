@@ -25,13 +25,14 @@ from Quartz.CoreGraphics import kCGHIDEventTap
 
 import pymouse
 
+import operatingsystem
 import path
 
 logger = logging.getLogger(__name__)
 
 
 # https://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html#//apple_ref/c/func/CGEventCreateMouseEvent
-class PyMouse(pymouse.PyMouse):
+class Mouse(pymouse.PyMouse):
     """Adds double click and uses different function to move mouse."""
 
     def move(self, x, y):
@@ -56,7 +57,7 @@ class PyMouse(pymouse.PyMouse):
         CGEventPost(kCGHIDEventTap, event)
 
 
-class OSX(object):
+class OSX(operatingsystem.BaseOS):
     """OSX specific."""
 
     # NSEvent.h
@@ -74,7 +75,7 @@ class OSX(object):
 
     def __init__(self):
         super(OSX, self).__init__()
-        self.mouse = PyMouse()
+        self._mouse = Mouse()
 
     def _run(self, code):
         logging.debug('Running "%s"' % code)
@@ -153,11 +154,11 @@ class OSX(object):
         """Moves mouse cursor to x, y in screen."""
 
         if relative:
-            current_x, current_y = self.mouse.position()
+            current_x, current_y = self._mouse.position()
             x = current_x + x
             y = current_y + y
 
-        self.mouse.move(x, y)
+        self._mouse.move(x, y)
 
     def mouse_click(self, button=1, double=False):
         """Emulates mouse button click. Default is left click.
@@ -166,8 +167,8 @@ class OSX(object):
             button: What button of the mouse to emulate.
                     Button is defined as 1 = left, 2 = right, 3 = middle.
         """
-        x, y = self.mouse.position()
+        x, y = self._mouse.position()
         if double:
-            self.mouse.double_click(x, y, button=button)
+            self._mouse.double_click(x, y, button=button)
         else:
-            self.mouse.click(x, y, button=button)
+            self._mouse.click(x, y, button=button)
