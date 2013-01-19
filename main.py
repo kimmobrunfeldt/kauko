@@ -44,6 +44,18 @@ def setup_logging(root_logger, level=logging.DEBUG):
     root_logger.addHandler(console_handler)
 
 
+def get_ip_address():
+    """Tries to find the ip address of the interface currently used."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip_address = s.getsockname()[0]
+        s.close()
+    except socket.error:
+        ip_address = socket.gethostbyname(socket.gethostname())
+    return ip_address
+
+
 class NullLog(object):
     """gevent writes directly to stdout, give instance of this class to gevent
     and it will shut up. Errors are still written to stderr though.
@@ -97,12 +109,16 @@ def main():
     setup_logging(logging.getLogger(''), level=logging_level)
 
     print('\nKauko is now started, quit the program by pressing Ctrl - C')
-    print('\nOpen the following address in your browser:')
 
-    address = 'http://%s' % socket.gethostbyname(socket.gethostname())
-    if port != 80:
-        address += ':%s' % port
-    print(address)
+    ip_address = get_ip_address()
+    if not ip_address.startswith('127'):
+        print('\nOpen the following address in your browser:')
+        address = 'http://%s' % ip_address
+        if port != 80:
+            address += ':%s' % port
+        print(address)
+    else:
+        print('\nCouldn\'t resolve your ip address.')
 
     # Serve static files and routes with wsgi app
     if logging_level > logging.DEBUG:
