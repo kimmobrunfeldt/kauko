@@ -87,7 +87,8 @@ If you don't care about virtualenv:
     sudo pip install gevent
     sudo pip install PyMouse
 
-    git clone https://github.com/kimmobrunfeldt/kauko.git
+    curl -L -O https://github.com/kimmobrunfeldt/kauko/archive/master.zip
+    mv kauko-master kauko
     cd kauko
 
 Linux(Ubuntu and other Debian based)
