@@ -8,32 +8,8 @@ class ExampleOS(object):
     def __init__(self):
         super(ExampleOS, self).__init__()
 
-    def toggle_sleep_display(self):
-        """Toggles display between sleep and awake."""
-        pass
-
-    def volume_up(self):
-        """Increases system volume."""
-        pass
-
-    def volume_down(self):
-        """Decreases system volume."""
-        pass
-
-    def toggle_mute(self):
-        """Toggle mute."""
-        pass
-
-    def next_track(self):
-        """Switches to next track."""
-        pass
-
-    def previous_track(self):
-        """Switches to previous track."""
-        pass
-
-    def play_pause(self):
-        """Play/pause media."""
+    def run(self, name, *args, **kwargs):
+        """Runs a predefined script defined in scripts.py."""
         pass
 
     def send_key(self, key, is_ascii=False):

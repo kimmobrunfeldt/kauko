@@ -89,16 +89,18 @@ def command(command, args, kwargs):
 
     # Resolve the command from keymap
     if command == BUTTON_PRESS_COMMAND:
-        button_id = str(args[0])
+
+        # Remove the button_id from arguments that are given to method
+        button_id = str(args.pop(0))
+
         try:
-            command = settings['keymap'][button_id]
+            # E.g. "run something param1"
+            command, parameters = settings['keymap'][button_id].split(' ', 1)
+            args = parameters.strip().split()
         except KeyError:
             msg = 'Error: Unknown button ID %s. It isn\'t specified in keymap.'
             logger.error(msg % button_id)
             return False
-
-        # Remove the button_id from arguments that are given to method
-        args = args[1:]
 
     try:
         method = getattr(_current_os, command)

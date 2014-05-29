@@ -1,5 +1,4 @@
 {
-
     "buttons": [
         [{"id": "button-control-layer", "icon": "default/keyboard.png", "autoSend": false}, {"id": "button-mute", "icon": "default/mute.png"}, {"id": "button-power", "icon": "default/power.png", "cssClasses": "btn-danger"}],
         [null, null, null],
@@ -8,12 +7,12 @@
         [null, {"id": "button-minus", "icon": "default/minus.png"}, null]
     ],
     "keymap": {
-        "button-power": "toggle_sleep_display",
-        "button-plus": "volume_up",
-        "button-arrows-left": "previous_track",
-        "button-play-pause": "play_pause",
-        "button-arrows-right": "next_track",
-        "button-mute": "toggle_mute",
-        "button-minus": "volume_down"
+        "button-power":         "run ToggleSleepDisplay",
+        "button-plus":          "send_key kauko_key_volume_up",
+        "button-arrows-left":   "send_key kauko_key_previous_track",
+        "button-play-pause":    "send_key kauko_key_play_pause",
+        "button-arrows-right":  "send_key kauko_key_next_track",
+        "button-mute":          "send_key kauko_key_volume_mute",
+        "button-minus":         "send_key kauko_key_volume_down"
     }
 }
